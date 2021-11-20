@@ -3,9 +3,11 @@ from functools import wraps
 
 console = Console()
 
+
 def print_locals():
     console.print("print locals()")
     console.print(locals())
+
 
 def show_locals(f):
     @wraps(f)
@@ -14,4 +16,11 @@ def show_locals(f):
         console.print("show locals()")
         console.print(locals())
         return result
+
     return wrap
+
+
+def pipe(data, *funcs):
+    for fn in funcs:
+        data = fn(data)
+    return data
