@@ -11,9 +11,8 @@ def test_do_process_returns_empty_deque():
     assert output == deque()
 
 
-def test_parse_returns_success():
-    name_parser = NameParser(raw_name)
-    name_parser.do_process()
-    d = name_parser.parse()
-    print(d)
-    assert d == deque()
+# def test_parse_returns_success():
+#     name_parser = NameParser(raw_name)
+#     name_parser.do_process()
+#     d = name_parser.parse()
+#     assert d == deque()

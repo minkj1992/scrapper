@@ -9,6 +9,7 @@ scrapy = "*"
 pytest = "*"
 rembg = "*"
 numpy = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

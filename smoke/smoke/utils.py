@@ -1,12 +1,12 @@
 from rich.console import Console
 from functools import wraps
+from rich.table import Table
 
 console = Console()
 
 
-def print_locals():
-    console.print("print locals()")
-    console.print(locals())
+def rich_print(data):
+    console.print(data)
 
 
 def show_locals(f):
@@ -24,3 +24,10 @@ def pipe(data, *funcs):
     for fn in funcs:
         data = fn(data)
     return data
+
+
+def get_table(headers) -> Table:
+    table = Table(show_header=True, header_style="bold magenta")
+    for header in headers:
+        table.add_column(header)
+    return table

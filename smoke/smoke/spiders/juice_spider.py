@@ -1,9 +1,10 @@
 import scrapy
-from smoke import settings, utils
+
+from .. import settings, utils
 
 
-class QuotesSpider(scrapy.Spider):
-    name = "쥬스팩토리_입호흡"
+class JuiceMouthSpider(scrapy.Spider):
+    name = "juice_mouth"
 
     def start_requests(self):
         urls = [
@@ -19,4 +20,3 @@ class QuotesSpider(scrapy.Spider):
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log(f'Saved file {filename}')
-        utils.print_locals()
