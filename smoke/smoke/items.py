@@ -3,33 +3,50 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
-from smoke.smoke.utils import pipe
+from .utils import pipe
 
 
 @dataclass
 class SmokeLiquidItem:
+    id: int
     name: str
+    brand: str
     category: SmokeLiquidCategoryEnum
-    nicotine_category: NicotineCategoryEnum
     volume: int  # 용량 (ml)
     price: int
-    nicotine: float  # 니코틴 함량 (mg)
+    vg: int  # 니코틴 비율 (vg: 100-vg = vg: pg)
     url: str
     img_url: str
+    nicotine_category: Optional[NicotineCategoryEnum] = None
+    descirption: Optional[str] = None  # 상품 설명
+    menthol: Optional[MentholStrengthEnum] = None  # 멘솔 정도
+
+    def get_img_name(self):
+        category = '입' if self.category == SmokeLiquidCategoryEnum.MOUTH else '폐'
+        return f"{self.id}_{category}_{self.brand}_{self.name}_{self.volume}_{self.vg}vg_{self.price}원.png"
 
 
-class SmokeLiquidCategoryEnum(Enum):
+class SmokeLiquidCategoryEnum(str, Enum):
     MOUTH = "mouth"  # 입호흡 (PG50 : VG50)
     LUNG = "lung"  # 폐호흡 (PG30 : VG70)
 
 
-class NicotineCategoryEnum(Enum):
+class NicotineCategoryEnum(str, Enum):
     SALT = "salt"  # salt / 각종 니코틴을 흡수가 잘 되도록 정제한 니코틴
+    RS = "rs"  # 합성 니코틴 / 의료용 니코틴
     TFN = "tfn"  # 합성 니코틴 / Tabacco Free Nicotine
     STEM = "stem"  # 줄기 니코틴 / 식물 담배의 줄기에서 추출한 니코틴
     TOBACO = "tobaco"  # 천연니코틴 / 식물 담배잎에서 추출한 니코틴
     FREE = "free"  # 무니코틴 / 니코틴 무
+
+
+class MentholStrengthEnum(str, Enum):
+    NONE = "none"  # 무
+    LOW = 'low'  # 낮음
+    NORMAL = "normal"  # 보통
+    HIGH = "high"  # 높음
 
 
 # TODO: move another dir

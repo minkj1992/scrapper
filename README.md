@@ -10,8 +10,7 @@
 ```bash
 # cd 상태에서 명령어 실행방법
 $ scrapy crawl juice_mouth
-$ scrapy crawl dk_mouth
-$ scrapy crawl quotes -O quotes.json
+$ scrapy crawl dk_mouth -o dk_mouth.json
 ```
 
 ![](./static/입호흡.png)
