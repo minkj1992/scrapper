@@ -13,7 +13,7 @@ login_form_data = {
 
 
 class DkMouthSpider(scrapy.Spider):
-    name = "dk_mouth"
+    name = "mouth"
 
     BASE_URL = "https://dkfactory.co.kr"
     LOGIN_URL = f"{BASE_URL}/exec/front/Member/login/"

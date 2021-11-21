@@ -22,10 +22,12 @@ class SmokeLiquidItem:
     nicotine_category: Optional[NicotineCategoryEnum] = None
     descirption: Optional[str] = None  # 상품 설명
     menthol: Optional[MentholStrengthEnum] = None  # 멘솔 정도
+    image_paths: str = ''
 
     def get_img_name(self):
+        file_ext = 'jpg'
         category = '입' if self.category == SmokeLiquidCategoryEnum.MOUTH else '폐'
-        return f"{self.id}_{category}_{self.brand}_{self.name}_{self.volume}_{self.vg}vg_{self.price}원.png"
+        return f"{self.id}_{category}_{self.brand}_{self.name}_{self.volume}_{self.vg}vg_{self.price}원.{file_ext}"
 
 
 class SmokeLiquidCategoryEnum(str, Enum):

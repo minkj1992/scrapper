@@ -1,13 +1,14 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+import scrapy
+from scrapy.pipelines.images import ImagesPipeline
+
+from .items import SmokeLiquidItem
 
 
-# useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+class SmokeLiquidItemImagesPipeline(ImagesPipeline):
+    def file_path(self, request, response=None, info=None, *, item=None):
+        folder_name = item.category
+        return f'{folder_name}/{item.get_img_name()}'
 
-
-class SmokePipeline:
-    def process_item(self, item, spider):
-        return item
+    def get_media_requests(self, item: SmokeLiquidItem, info):
+        meta = {'filename': item.get_img_name()}
+        yield scrapy.Request(url=item.img_url, meta=meta)
