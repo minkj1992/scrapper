@@ -10,6 +10,7 @@ pytest = "*"
 rembg = "*"
 numpy = "*"
 python-dotenv = "*"
+pandas = "*"
 
 [dev-packages]
 
