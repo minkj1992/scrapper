@@ -8,6 +8,12 @@ from typing import Optional
 from .utils import pipe
 
 
+def _get_image_nmae(smoke_liquid_item: SmokeLiquidItem):
+    file_ext = 'jpg'
+    category = '입' if smoke_liquid_item.category == SmokeLiquidCategoryEnum.MOUTH else '폐'
+    return f"{smoke_liquid_item.id}_{category}_{smoke_liquid_item.brand}_{smoke_liquid_item.name}_{smoke_liquid_item.volume}_{smoke_liquid_item.vg}vg_{smoke_liquid_item.price}원.{file_ext}"
+
+
 @dataclass
 class SmokeLiquidItem:
     id: int
@@ -16,18 +22,17 @@ class SmokeLiquidItem:
     category: SmokeLiquidCategoryEnum
     volume: int  # 용량 (ml)
     price: int
-    vg: int  # 니코틴 비율 (vg: 100-vg = vg: pg)
+    vg: int  # 니코틴 비율 (vg: 100-vg = vg: pg), default = -1 (invalid)
     url: str
     img_url: str
     nicotine_category: Optional[NicotineCategoryEnum] = None
     descirption: Optional[str] = None  # 상품 설명
     menthol: Optional[MentholStrengthEnum] = None  # 멘솔 정도
     image_paths: str = ''
+    image_name: str = None
 
-    def get_img_name(self):
-        file_ext = 'jpg'
-        category = '입' if self.category == SmokeLiquidCategoryEnum.MOUTH else '폐'
-        return f"{self.id}_{category}_{self.brand}_{self.name}_{self.volume}_{self.vg}vg_{self.price}원.{file_ext}"
+    def __post_init__(self):
+        object.__setattr__(self, 'image_name', _get_image_nmae(self))
 
 
 class SmokeLiquidCategoryEnum(str, Enum):

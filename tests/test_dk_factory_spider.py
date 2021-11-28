@@ -1,7 +1,7 @@
-from smoke.smoke.spiders.dk_factory_spider import DkMouthSpider
+from smoke.smoke.spiders.dk_factory_spider import DKMouthSpider
 
 raw_name = "■ [오지구OG9] 고드름 소다 (50VG) 30ml"
-dk_mouth_spider = DkMouthSpider()
+dk_mouth_spider = DKMouthSpider()
 
 
 def test_parse_brand_name():
