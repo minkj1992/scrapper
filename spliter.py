@@ -1,6 +1,5 @@
 import pyperclip
-
-
+name = "폐호흡 슈퍼쿨 스트로베리 프로스트 액상 합성 60ml 3mg"
 def replace_name(n):
     return n.replace(' ', ', ')
 
@@ -16,8 +15,7 @@ def copy_clipboard(s):
     pyperclip.paste()
 
 
-if __name__ == '__main__':
-    name = "폐호흡 디톡스 알로에베라 액상 합성 60ml 3mg"
-    result = split_single(name)
-    copy_clipboard(result)
+
+result = split_single(name)
+copy_clipboard(result)
 

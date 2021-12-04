@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import List
 
-file_name = 'dk_mouth'
+file_name = 'dk_lung'
 target_json_dir = f'smoke/{file_name}.json'
 csv_dir = 'static/csv'
 
