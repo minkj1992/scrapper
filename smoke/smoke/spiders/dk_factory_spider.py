@@ -4,7 +4,7 @@ import scrapy
 from scrapy.selector import SelectorList
 
 from .. import utils, settings
-from ..items import SmokeLiquidCategoryEnum, SmokeLiquidItem
+from ..items.smoke import SmokeLiquidCategoryEnum, SmokeLiquidItem
 
 LOGIN_FORM_DATA = {"member_id": settings.DK_FACTORY_USER_ID, "member_passwd": settings.DK_FACTORY_USER_PW}
 

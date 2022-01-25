@@ -1,6 +1,6 @@
 from collections import deque
 
-from smoke.smoke.items import NameParser
+from apps.app.items.smoke import NameParser
 
 raw_name = "입호흡 스톰리퀴드 골드씬 액상 합성 30ml 9.8mg"
 

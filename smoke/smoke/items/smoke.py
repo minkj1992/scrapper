@@ -5,12 +5,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-from .utils import pipe
+from ..utils import pipe
 
 
 def _get_image_nmae(smoke_liquid_item: SmokeLiquidItem):
-    file_ext = 'jpg'
-    category = '입' if smoke_liquid_item.category == SmokeLiquidCategoryEnum.MOUTH else '폐'
+    file_ext = "jpg"
+    category = "입" if smoke_liquid_item.category == SmokeLiquidCategoryEnum.MOUTH else "폐"
     return f"{smoke_liquid_item.id}_{category}_{smoke_liquid_item.brand}_{smoke_liquid_item.name}_{smoke_liquid_item.volume}_{smoke_liquid_item.vg}vg_{smoke_liquid_item.price}원.{file_ext}"
 
 
@@ -28,11 +28,11 @@ class SmokeLiquidItem:
     nicotine_category: Optional[NicotineCategoryEnum] = None
     descirption: Optional[str] = None  # 상품 설명
     menthol: Optional[MentholStrengthEnum] = None  # 멘솔 정도
-    image_paths: str = ''
+    image_paths: str = ""
     image_name: str = None
 
     def __post_init__(self):
-        object.__setattr__(self, 'image_name', _get_image_nmae(self))
+        object.__setattr__(self, "image_name", _get_image_nmae(self))
 
 
 class SmokeLiquidCategoryEnum(str, Enum):
@@ -51,12 +51,11 @@ class NicotineCategoryEnum(str, Enum):
 
 class MentholStrengthEnum(str, Enum):
     NONE = "none"  # 무
-    LOW = 'low'  # 낮음
+    LOW = "low"  # 낮음
     NORMAL = "normal"  # 보통
     HIGH = "high"  # 높음
 
 
-# TODO: move another dir
 class NameParser:
     """
     쥬스팩토리에서 크롤링한 상품이름을 적절한 정보로 변경한다.
@@ -74,11 +73,11 @@ class NameParser:
         self.do_process()
 
         return {
-            'name': self.name,
-            'category': self.category,
-            'nicotine_category': self.nicotine_category,
-            'volume': self.volume,
-            'nicotine': self.nicotine
+            "name": self.name,
+            "category": self.category,
+            "nicotine_category": self.nicotine_category,
+            "volume": self.volume,
+            "nicotine": self.nicotine,
         }
 
     def do_process(self) -> deque:
@@ -89,7 +88,7 @@ class NameParser:
             self._set_nicotine,
             self._set_volume,
             self._set_nicotine_category,
-            self._set_name
+            self._set_name,
         )
         return output
 
@@ -100,20 +99,20 @@ class NameParser:
 
     def _set_nicotine(self, data: deque) -> deque:
         raw_nicotine = data.pop()
-        nicotine = raw_nicotine.replace('mg', '')
+        nicotine = raw_nicotine.replace("mg", "")
         self.nicotine = float(nicotine)
         return data
 
     def _set_volume(self, data: deque) -> deque:
         raw_volume = data.pop()
-        volume = raw_volume.replace('ml', '')
+        volume = raw_volume.replace("ml", "")
         self.volume = int(volume)
         return data
 
     def _set_nicotine_category(self, data: deque) -> deque:
         nicotine_category = data.pop()
 
-        if nicotine_category == '합성':
+        if nicotine_category == "합성":
             nicotine_category = NicotineCategoryEnum.TFN
         self.nicotine_category = nicotine_category
         return data
@@ -123,5 +122,5 @@ class NameParser:
         for _ in range(len(data)):
             name_list += data.popleft()
 
-        self.name = '_'.join(name_list)
+        self.name = "_".join(name_list)
         return data
