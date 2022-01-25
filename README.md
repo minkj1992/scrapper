@@ -9,6 +9,7 @@
 
 ```bash
 $ scrapy startproject poster
+$ scrapy crawl okky_init -o okky.json
 ```
 
 ## run scrapper
@@ -31,12 +32,11 @@ $ scrapy crawl dk_lung -o dk_lung.json
 ### okky scrapper
 
 #### init
-
+> scrapy는 async로 동작하여 순서를 보장하지 못한다.
 1. okky 페이지를 방문한다.
-2. for i in range(10, 0, -1)
-   1. 페이지의 24개 post를 각각 스크랩한다.
-   2. reversed 해서 csv loader에 담는다.
-      1. 각 페이지의 순서 보장할 것
+2. 500개 페이지 window를 만든다. (1depth)
+   1. 각 페이지의 24개 post들을 타고 들어간다 (2depth)
+   2. parse 후 okky.json에 추가한다.
 
 #### update
 
