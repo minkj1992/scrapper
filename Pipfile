@@ -11,6 +11,9 @@ rembg = "*"
 numpy = "*"
 python-dotenv = "*"
 pandas = "*"
+crontab = "*"
+selenium = "*"
+webdriver-manager = "*"
 
 [dev-packages]
 

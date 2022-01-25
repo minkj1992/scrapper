@@ -1,7 +1,9 @@
-import requests
 from dataclasses import dataclass
+from selenium import webdriver
 from dotenv import dotenv_values
+from webdriver_manager.chrome import ChromeDriverManager
 
+browser = webdriver.Chrome(ChromeDriverManager().install())
 config = dotenv_values(".env")
 NUM_OF_USERS = 2
 
@@ -12,6 +14,11 @@ class UserDto:
     pwd: str
 
 
+def open_browser(browser, url):
+    browser.get(url)
+    browser.implicitly_wait(1)
+
+
 def read_user_info():
     users = []
     for i in range(NUM_OF_USERS):
@@ -19,57 +26,65 @@ def read_user_info():
     return users
 
 
-def create_session():
-    return requests.session()
+def input_text(component, text: str):
+    component.send_keys(text)
 
 
-def login(session, user: UserDto):
-    login_url = "https://evape.kr/bbs/login_check.php"
-    headers = {"content-type": "application/x-www-form-urlencoded"}
-    payload = {"url": "https://evape.kr/", "mb_id": user.id, "mb_password": user.pwd}
-    session.post(login_url, headers=headers, data=payload)
-    return session
+def login(browser, user: UserDto):
+    login_id = browser.find_element_by_css_selector("#ol_id")
+    input_text(login_id, user.id)
+
+    login_pw = browser.find_element_by_css_selector("#ol_pw")
+    input_text(login_pw, user.pwd)
+    submit_btn = browser.find_element_by_css_selector("#ol_submit")
+    submit_btn.click()
 
 
-def get_cookies(session):
-    return session.cookies
+def click_yes_to_alert(browser):
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+
+    WebDriverWait(browser, 10).until(EC.alert_is_present())
+    browser.switch_to.alert.accept()
 
 
-def logout(session):
+def write_post(browser):
+    post_url = "https://evape.kr/bbs/write.php?bo_table=free"
+    browser.get(post_url)
+
+    subject = browser.find_element_by_css_selector("#wr_subject")
+    input_text(subject, "가입 인사 친절하게 박습니다.")  # TODO: okky title로 대체
+
+    iframe = browser.find_element_by_xpath('//*[@id="fwrite"]/div[1]/table/tbody/tr[3]/td/iframe')
+    browser.switch_to.frame(iframe)
+    text_btn = browser.find_element_by_css_selector(
+        "#smart_editor2_content > div.se2_conversion_mode > ul > li:nth-child(3) > button"
+    )
+    text_btn.click()
+    click_yes_to_alert(browser)
+
+    text = browser.find_element_by_css_selector(
+        "#smart_editor2_content > div.se2_input_area.husky_seditor_editing_area_container > textarea.se2_input_syntax.se2_input_text"
+    )
+    input_text(text, "안녕하세요 인사 오지게\n박습니다 행님들 \n")  # TODO: okky post 대체
+    browser.switch_to.default_content()
+    submit_btn = browser.find_element_by_css_selector("#btn_submit")
+    submit_btn.click()
+
+
+def logout(browser):
     logout_url = "https://evape.kr/bbs/logout.php"
-    session.get(logout_url)
-
-
-def get_token(session):
-    token_url = "https://evape.kr/bbs/write_token.php"
-    headers = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}
-    payload = {"bo_table": "free"}
-    r = session.post(token_url, headers=headers, data=payload).json()
-    return r["token"]
-
-
-def write_post(session, token):
-    post_url = "https://evape.kr/bbs/write_update.php"
-    headers = {
-        "content-type": "multipart/form-data",
-        "cookie": get_cookies(session),
-        "Referer": "https://evape.kr/bbs/write.php?bo_table=free",
-    }
-
-    payload = {
-        "token": token,
-        "uid": "2022012515183931",
-        "wr_subject": "가입 인사드립니당 ~ :)",
-        "wr_content": "<p>형님들 안녕하세요 오지게 인사 먼저 박습니다.&nbsp;</p><p>모두 즐거운 베이핑 하시죠</p>",
-    }
-    r = session.post(post_url, headers=headers, data=payload)
-    print(r.json())
+    browser.get(logout_url)
 
 
 def main():
+    open_browser(browser, url="https://evape.kr")
     users = read_user_info()
-    user = users[0]
-    session = login(create_session(), user)
-    token = get_token(session)
-    session = write_post(session, token)
-    logout(session)
+    for user in users:
+        login(browser, user)
+        write_post(browser)
+        logout(browser)
+    browser.close()
+
+
+main()

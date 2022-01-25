@@ -31,14 +31,16 @@ $ scrapy crawl dk_lung -o dk_lung.json
 
 ### okky scrapper
 
-#### init
+#### [x] init
+
 > scrapy는 async로 동작하여 순서를 보장하지 못한다.
+
 1. okky 페이지를 방문한다.
 2. 500개 페이지 window를 만든다. (1depth)
    1. 각 페이지의 24개 post들을 타고 들어간다 (2depth)
    2. parse 후 okky.json에 추가한다.
 
-#### update
+#### [ ] update
 
 > cronjob
 
@@ -50,14 +52,16 @@ $ scrapy crawl dk_lung -o dk_lung.json
    2. for post in range(until_idx, 0, -1)
       1. insert to csv
 
-### csv loader
+### [x] csv loader
 
 - `insert`
 - `set_posted`
 - `bulk_insert`
 - `read(window_size)`
 
-### evape poster
+### [x] evape poster
+
+> requests를 사용하는 스크립트를 만들었지만, iframe 컨텐츠에 text를 넣고 submit 넣는 부분이 까다롭다보니, selenium 코드로 전환하였습니다.
 
 1. evape site를 user의 수 만큼 연다.
 2. 각 evape window에 로그인 한다.

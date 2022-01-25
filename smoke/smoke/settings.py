@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {'smoke.pipelines.SmokeLiquidItemImagesPipeline': 300}
+# ITEM_PIPELINES = {'smoke.pipelines.SmokeLiquidItemImagesPipeline': 300}
 IMAGES_STORE = '/Users/kakao/code/minkj1992/scrapper/static'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
