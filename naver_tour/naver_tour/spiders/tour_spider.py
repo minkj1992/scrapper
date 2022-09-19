@@ -26,13 +26,24 @@ def get_url_by_date(start_date: str, end_date: str):
 class NaverTourSpier(scrapy.Spider):
     name = "naver_tour"
 
+    target_xpath = '//*[@id="__next"]/div/div[1]/div[5]/div/div[3]/div[1]/div/button'
+    sec_loading_css = '#loadingProgress_loadingProgress__1LRJo'
+
+    @staticmethod
+    def is_loading(response):
+        console.print(response.xpath(NaverTourSpier.target_xpath))
+        console.print(response.css(NaverTourSpier.sec_loading_css))
+        return not bool(response.xpath(NaverTourSpier.target_xpath)) and bool(
+            response.css(NaverTourSpier.sec_loading_css))
+
     def start_requests(self):
         for s, e in utils.date_iter(START_AT, END_AT):
             url = get_url_by_date(s, e)
             yield scrapy.Request(url, callback=self.parse)
+            break
 
     def parse(self, response):
-        console.print(response.text)
+        ...
         # posts: SelectorList = response.css("#list-article > div.panel.panel-default.life-panel > ul > li")
         # for post_idx, post in enumerate(posts):
         #     post_id = post.css("div.list-title-wrapper.clearfix > div > span::text").get()[1:]

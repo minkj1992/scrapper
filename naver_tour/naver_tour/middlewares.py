@@ -6,6 +6,8 @@
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 from scrapy import signals
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+from scrapy.utils.response import response_status_message
 
 
 class NaverTourSpiderMiddleware:
@@ -100,3 +102,20 @@ class NaverTourDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class CustomRetryMiddleware(RetryMiddleware):
+    max_retry_times = 5
+
+    def process_response(self, request, response, spider):
+        if request.meta.get('dont_retry', False):
+            return response
+        if response.status in self.retry_http_codes:
+            reason = response_status_message(response.status)
+            return self._retry(request, reason, spider) or response
+
+        if spider.is_loading(response):
+            return self._retry(
+                request, 'response got xpath "{}"'.format(spider.loading_xpath),
+                spider) or response
+        return response
