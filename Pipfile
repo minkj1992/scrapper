@@ -14,8 +14,10 @@ pandas = "*"
 crontab = "*"
 selenium = "*"
 webdriver-manager = "*"
+yapf = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.8"
